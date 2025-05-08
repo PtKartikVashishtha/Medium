@@ -28,7 +28,8 @@ blogRouter.use('/*' , async (c , next) => {
       } , 403) ;
     }
     console.log(isVerified) ;
-    c.set('userId' , JSON.stringify(isVerified.id));
+    // @ts-ignore
+    c.set('userId' , isVerified.id);
     await next() ;
 }) ;
 
@@ -52,6 +53,7 @@ blogRouter.post('/blog' , async (c) => {
         }) ;
     }
     catch(e){
+        console.log(e) ;
         return c.json({
             message : "Some error occurred"
         });
@@ -109,13 +111,13 @@ blogRouter.get('/blog/:id' , async (c) => {
     }
 }) ;
 
-blogRouter.get("/blog/bulk" , async(c) => {
+blogRouter.get("/bulk" , async(c) => {
     try{
         const prisma = new PrismaClient({
             datasourceUrl: c.env.DATABASE_URL,
         }).$extends(withAccelerate()) ;
-        const blogs = await prisma.posts.findMany({}) ;
-        console.log("fetched all blogs") ;
+        const blogs = await prisma.posts.findMany() ; 
+        console.log(blogs) ;
         return c.json({
             message : "fetched all blogs" ,
             data : blogs
@@ -124,7 +126,6 @@ blogRouter.get("/blog/bulk" , async(c) => {
     catch(e){
         return c.json({
             message : "Some error occurred"
-
         })
     }
 })

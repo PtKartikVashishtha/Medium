@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from '@prisma/client/edge/edge.js' ;
 import { withAccelerate } from '@prisma/extension-accelerate' ;
 import {sign , decode , verify} from "hono/jwt" ;
+import { SignInInput , singUpInput } from "@kartikashishtha/zod-medium"; 
 
 export const userRouter = new Hono<{
     Bindings: {
@@ -19,7 +20,7 @@ userRouter.post('/signup' , async (c) => {
     }).$extends(withAccelerate()) ;
     const body = await c.req.json() ;
     try{
-  
+      // const {success} = safe
       const response = await prisma.user.create({
         data : {
           name : body.name ,
@@ -34,11 +35,6 @@ userRouter.post('/signup' , async (c) => {
       console.log(response) ;
       return c.json({
         message : "user created" ,
-        data : {
-          id : response.id ,
-          name : response.name ,
-          email : response.email 
-        } , 
         token ,
       }) ;
     }
