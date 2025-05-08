@@ -1,6 +1,7 @@
 # prod
 dist/
-
+.gitignore
+wrangler.toml
 # dev
 .yarn/
 !.yarn/releases
@@ -14,8 +15,7 @@ dist/
 # deps
 node_modules/
 .wrangler
-.gitignore
-wrangler.toml
+
 # env
 .env
 .env.production
